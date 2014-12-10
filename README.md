@@ -77,7 +77,7 @@ It gives you a pretty listing including:
 The Plugin does nothing in terms of loading a keyfile or changing a configuration. It does ensure any symlinks are updated and all necessary auth sock variables are set correctly.
 It also does some checking to ensure the environment is stable.
 
-[Induction gives your current state at every login or source of your .zshrc](img/induction.zsh.plugin.png)
+[Induction gives your current state at every login or source of your .zshrc](https://raw.githubusercontent.com/InAnimaTe/induction/master/img/induction.zsh.plugin.png)
 
 **Induction**
 
