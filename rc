@@ -1,0 +1,15 @@
+#!/bin/bash
+if pgrep -u $LOGNAME ssh-agent > /dev/null
+then
+        #Well looks like ssh-agent is already running meaning the symlink is already pointing to the already created local socket...good to go!
+        #Setting our backup symlink that always should point to our current remotely forwarded socket from this login
+        ln -sf $SSH_AUTH_SOCK ~/ssh_auth_sock_rem
+        exit
+else
+        #as far as we know, ssh-agent is not running.
+        #lets go ahead and set this up
+        if test "$SSH_AUTH_SOCK" ; then
+            ln -sf $SSH_AUTH_SOCK ~/ssh_auth_sock
+            ln -sf $SSH_AUTH_SOCK ~/ssh_auth_sock_rem
+        fi
+fi

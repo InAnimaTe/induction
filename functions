@@ -1,0 +1,25 @@
+## This file holds dependent functions and workers for induction. Please do not modify!
+
+## Define our version
+
+VER="1.0"
+
+## Functions we need
+
+exists () {
+    type "$1" &> /dev/null ;
+}
+
+## Binary checks
+
+if exists ssh-agent; then
+    SSH_AGENT_BINARY_EXIST="yes"
+    using_agent=$(pgrep -u $LOGNAME ssh-agent)
+fi
+
+
+if exists gpg-agent; then
+    GPG_AGENT_BINARY_EXIST="yes"
+    using_gpg_agent=$(pgrep -u $LOGNAME gpg-agent)
+fi
+

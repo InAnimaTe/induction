@@ -1,0 +1,175 @@
+#!/bin/zsh
+
+agentpick () {
+       ### Start of array for list of config files to give user option to pick
+        declare -a ARRAY
+            let index=1
+
+        IFS=$'\n'
+        for agent in {gpg-agent,ssh-agent}; do
+            ARRAY[$index]="$agent"
+            echo "${index}) ${ARRAY[$index]}"
+            ((index++))
+        done
+
+        echo ""
+        echo -en "Which agent would you like to continue with?:> "
+        read AGENTPICK
+
+}
+
+
+killssh () {
+
+        #Maybe theres a problem...this kills all ssh-agents running as your user
+        echo "Killing any running agents..."
+        ps -u $LOGNAME | grep 'ssh-agent'
+        killall -u $LOGNAME ssh-agent
+        #setting our symlink to pnt to our remote forwarded socket
+        cp -P "$SSH_AUTH_SOCK_REM_ROOT" "$SSH_AUTH_SOCK_ROOT"
+        echo "Done...exiting."
+        exit
+
+}
+
+regssh () {
+    # Very first thing is check if the user actually enabled gpg foundation
+    if [ -z $SSH_FOUNDATION ];
+    then
+        echo -en "Looks like you do NOT have ssh support enabled...Exiting..\n"
+        exit
+    elif [ -z $SSH_AGENT_BINARY_EXIST ];
+    then
+        echo -en "No ssh-agent binary existent! Exiting.."
+        exit
+    fi
+    
+    # First, lets kill any already running ssh-agent, since we know the user is choosing us to manage this for them!
+    killssh
+
+    declare -a ARRAY
+        let index=1
+    IFS=$'\n'
+    for keyfile in $(ls $HOME/.ssh | grep "id_" | grep -v ".pub"); do
+        ARRAY[$index]="$keyfile"
+        echo "${index}) ${ARRAY[$index]}"
+        ((index++))
+    done
+    echo -en "\nWhich ssh keyfile would you like to load?:> "
+    read KEYFILECHOICE
+
+    eval `ssh-agent` && ln -sf $SSH_AUTH_SOCK "$SSH_AUTH_SOCK_ROOT" && ssh-add "$HOME/.ssh/${ARRAY[$KEYFILECHOICE]}"
+    echo "Done! Your key is registered on this server. Any continuously running scripts should work successfully."
+
+
+}
+
+reggpg () {
+    
+    # Very first thing is check if the user actually enabled gpg foundation
+    if [ -z $GPG_FOUNDATION ]; 
+    then
+        echo -en "Looks like you do NOT have gpg support enabled...Exiting..\n"
+        exit
+    elif [ -z $GPG_AGENT_BINARY_EXIST ];
+    then
+        echo -en "No gpg-agent binary existent! Exiting.."
+        exit
+    fi
+
+## Kill any already existing gpg agents. Note this also takes care of our pointer file!
+killgpg
+
+## Lets utilize the gpg-agent plugin to check for and start a running agent
+source $ZSH_PLUGINS/gpg-agent/gpg-agent.plugin.zsh && echo -en "\n\nNew agent: $GPG_AGENT_INFO\nCreating symlink..\n" && ln -sf $GPG_AGENT_INFO "$GPG_AGENT_INFO_ROOT"
+if [ $? -eq 0 ]; then
+    echo -en "Symlink created: $(ls -l $GPG_AGENT_INFO_ROOT)\n\nStarting key loading process..."
+else
+    echo -en "There was a problem starting the gpg-agent program...exiting!"
+    exit
+fi
+sleep 1s # let people process the above
+
+## Now lets register the user key
+
+GPG_KEY_ID=$(gpg --list-secret-keys 2>/dev/null | cut -d/ -f2 | cut -d' ' -f1 | xargs | awk -F " " '{print $3}')
+if [ -z $GPG_KEY_ID ]; then
+    echo -en "GPG private key NOT loaded...Initiating loading sequence...\n"
+    declare -a ARRAY
+        let index=1
+    IFS=$'\n'
+    for keyfile in $(ls $GPG_PRIV_KEY_ROOT); do
+        ARRAY[$index]="$keyfile"
+        echo "${index}) ${ARRAY[$index]}"
+        ((index++))
+    done
+    echo -en "\nWhich gpg keyfile would you like to load?:> "
+    read GPGKEYFILECHOICE
+
+    gpg --allow-secret-key-import --import ${GPG_PRIV_KEY_ROOT}/${ARRAY[$GPGKEYFILECHOICE]}
+    if [[ $? -eq 0 ]]; then
+        GPG_KEY_ID=$(gpg --list-secret-keys 2>/dev/null | cut -d/ -f2 | cut -d' ' -f1 | xargs | awk -F " " '{print $3}')
+        echo -en "Loaded $GPG_KEY_ID successfully..."
+    else
+        echo -en ":( There was a problem loading your GPG key...Exiting.."
+        exit
+    fi
+fi
+
+rm -rf $GPG_KEY_LOADED_FILE
+echo "test" | gpg -ase -r 0x${GPG_KEY_ID} | gpg
+if [[ $? -eq 0 ]]; then
+    echo -en ":) Your GPG key $GPG_KEY_ID has been loaded!"
+    echo -en "$GPG_KEY_ID" > $GPG_KEY_LOADED_FILE
+else
+    echo -en ":( Something went wrong registering your key in gpg-agent"
+fi
+}
+
+killgpg () {
+
+killall -0 gpg-agent 2>/dev/null
+if [ $? -eq 0 ]; then
+    killall gpg-agent
+    sleep 1
+    killall -0 gpg-agent 2>/dev/null && killall -9 gpg-agent
+    #remember to remove the keyloaded file we utilize
+    rm -rf $GPG_KEY_LOADED_FILE
+    #and also the agent info pointer file
+    rm -rf $GPG_AGENT_INFO_ROOT
+    #ohhhh and the gpg-agent.env file
+    rm -rf $GPG_AGENT_ENV_FILE
+    echo -en "Killed gpg-agent process successfully."
+else
+    echo -en "You don't seem to have permissions to modify this gpg-agent!"
+fi
+
+}
+
+
+srcfiles () {
+if [ -e $HOME/.induction ]; then
+    source $HOME/.induction
+    source $ZSH_PLUGINS/induction/functions
+else
+    print -P "No config file available!! Please fix this or disable induction!"
+    exit
+fi
+}
+
+case "$1" in
+    help|-h|?|--help)
+        echo "This will function will launch ssh-agent and ssh-add to register your private key locally on this server for continued usage when your not logged in, and when you log back in:)"
+        echo "running just \"reg\" will register you making sure to first check if you are already registered...running \"reg kill\" will kill any current ssh-agent processes in event of a problem/error/corruption"
+        exit
+        ;;
+    kill|k) srcfiles
+        agentpick
+        [[ $AGENTPICK == 1 ]] && killgpg || killssh
+        ;;
+    *) srcfiles
+        agentpick
+        [[ $AGENTPICK == 1 ]] && reggpg || regssh
+esac
+
+

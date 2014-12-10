@@ -1,0 +1,46 @@
+# Variable Definition
+
+# Tips:
+# * No ending slashes
+# * If you disable a foundation, you don't need to fill out its sub-options
+
+#-----
+
+# oh-my-zsh plugins dir
+ZSH_PLUGINS="$HOME/oh-my-zsh/plugins"
+
+# [Optional] the location of the colors file
+source "$ZSH_PLUGINS/induction/colors"
+
+#-----
+
+# Lets you define if we should setup your ssh pointer file
+# Comment out to opt out!
+SSH_FOUNDATION="yes"
+
+    # The main symlink location your shell variable always points to
+    SSH_AUTH_SOCK_ROOT="$HOME/ssh_auth_sock"
+
+    # The location where your forwarded socket is
+    SSH_AUTH_SOCK_REM_ROOT="$HOME/ssh_auth_sock_rem"
+
+#-----
+
+# Like above, define if we should setup the gpg pointer file
+# Clear the variable to opt out, enter yes to opt in!
+GPG_FOUNDATION="yes"
+
+    # The main symlink for gpg, similar to the above for ssh
+    GPG_AGENT_INFO_ROOT="$HOME/.gnupg/gpg_agent_info"
+
+    # The location of your gpg private keys
+    GPG_PRIV_KEY_ROOT="$HOME/.gnupg/keys"
+
+    # Define the file that will be used to dictate loaded keys in gpg-agent (since it fails at reporting that itself)
+    GPG_KEY_LOADED_FILE="$HOME/.gnupg/key_loaded.env"
+
+    # This is the gpg-agent file path since we need this to source the current location of the agent socket
+    # and we cant use symlinks :(
+    GPG_AGENT_ENV_FILE="$HOME/.gnupg/gpg-agent.env"
+
+#-----
