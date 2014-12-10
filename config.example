@@ -10,7 +10,7 @@
 ZSH_PLUGINS="$HOME/oh-my-zsh/plugins"
 
 # [Optional] the location of the colors file
-source "$ZSH_PLUGINS/induction/colors"
+. "$ZSH_PLUGINS/induction/colors"
 
 #-----
 
