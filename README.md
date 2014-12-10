@@ -2,6 +2,9 @@
 
 > I am not much of a coder so please offer up enhancements and I will happily test and pull them in:)
 
+![Induction gives your current state at every login or source of your .zshrc](img/img1.png?raw=true)
+
+
 ##### The Problem
 
 Induction is a ssh and gpg-agent socket manager for registering ssh keys on a host and gpg keys for secure messaging.
@@ -77,7 +80,9 @@ It gives you a pretty listing including:
 The Plugin does nothing in terms of loading a keyfile or changing a configuration. It does ensure any symlinks are updated and all necessary auth sock variables are set correctly.
 It also does some checking to ensure the environment is stable.
 
-![Induction gives your current state at every login or source of your .zshrc](img/induction.zsh.plugin.png?raw=true)
+![](img/img2.png?raw=true)
+![No binary found](img/img3.png?raw=true)
+![User has disabled gpg support in .induction config file](img/img4.png?raw=true)
 
 **Induction**
 
