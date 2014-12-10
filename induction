@@ -28,7 +28,6 @@ killssh () {
         #setting our symlink to pnt to our remote forwarded socket
         cp -P "$SSH_AUTH_SOCK_REM_ROOT" "$SSH_AUTH_SOCK_ROOT"
         echo "Done...exiting."
-        exit
 
 }
 
