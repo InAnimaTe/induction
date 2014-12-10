@@ -91,7 +91,7 @@ The `.ssh/rc` file is run at every login via a ssh connection. Its main purpose 
 
 ##### Differences from funtoo/keychain
 
-Although very similar to keychain, induction aims for more of a straight through approach whist trying to give the user flexibility in a "ready when you are" fashion.
+Although very similar to keychain, induction aims for more of a straight through approach whilst trying to give the user flexibility in a "ready when you are" fashion.
 
 Some of the core *differences* from keychain:
 
