@@ -52,7 +52,7 @@ Induction ensures that your experience is as hands off as possible whilst giving
 ##### Installation and Usage
 
 1. Clone into your `oh-my-zsh` plugins directory
-2. Copy `rc` to your `~/.ssh/` directory 
+2. Copy `sshrc` to `~/.ssh/rc`
 3. Move config.example to `~/.induction` and take a gander at the options, explained below
 4. Enable the plugin in your `.zshrc` file
 4. Make an alias to call induction if you'd like i.e. `alias register='$ZSH/plugins/induction/induction'`
