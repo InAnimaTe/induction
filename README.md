@@ -60,7 +60,7 @@ Induction ensures that your experience is as hands off as possible whilst giving
 **Usage**
 
 To get an assessment, just source your .zshrc and you'll see the Plugin component list out the current state of your agents.
-To register a key via an interactive menu, launch induction via an alaas you set or calling it directly: `induction [kill | ?/-h/help]`
+To register a key via an interactive menu, launch induction via an alias you set or calling it directly: `induction [kill | ?/-h/help]`
 
 ##### The Pieces
 
@@ -84,7 +84,7 @@ IMAGE
 **Induction**
 
 Induction is the script itself, which does the grunt work of interactively allowing the user to load keys into the necessary agent.
-You invoke induction, choose the agent you want to work with, pick the keyfile to load, and enter your password. Thats it! Induction takes care of the reset:)
+You invoke induction, choose the agent you want to work with, pick the keyfile to load, and enter your password. Thats it! Induction takes care of the rest:)
 
 
 **RC**
