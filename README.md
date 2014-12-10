@@ -92,7 +92,7 @@ You invoke induction, choose the agent you want to work with, pick the keyfile t
 
 **RC**
 
-The `.ssh/rc` file is run at every login via a ssh connection. Its main purpose it to update symlink pointers with the latest agent path craeted at login.
+The `.ssh/rc` file is run at every login via a ssh connection. Its main purpose it to update symlink pointers with the latest agent path created at login.
 
 ##### Differences from funtoo/keychain
 
