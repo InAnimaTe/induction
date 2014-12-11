@@ -116,6 +116,22 @@ Most of these exist because I haven't included support for them yet. As I get to
 3. There is no logging of any kind, although this is not too important
 4. Only on ZSH, would like to make bash compatible as well (it probably mostly is, just needs some tuning)
 
+##### Roadmap
+
+*1.0*
+* better coloring and interactive prompts for core induction
+* optional alias setup to call induction
+* detection of GPG v1 or v2 and different behavior depending (deal with symlink issues)
+* better detection of multiple gpg/ssh-agent processes 
+* more documentation
+
+*1.5*
+* ability to load multiple keys in both ssh and gpg-agent
+* define the length of time to hold your private key in said agent
+* possibly add a logfile
+* Make bash compatible
+* testing and instructions on how to use without oh-my-zsh
+
 ##### More on this
 
 *Blog post soon to come..*
