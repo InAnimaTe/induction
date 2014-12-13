@@ -4,6 +4,7 @@
 
 ![Induction gives your current state at every login or source of your .zshrc](img/img1.png?raw=true)
 
+Get Help!: *##induction* on [freenode](https://freenode.net/)
 
 ##### The Problem
 
