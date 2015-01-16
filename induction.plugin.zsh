@@ -128,6 +128,7 @@ fi
 
 if [ -e $HOME/.induction ]; then
     source $HOME/.induction
+    [ $ALIASPLZ ] && alias $ALIASPLZ='$ZSH_PLUGINS/induction/induction'
     runall
     # Squeaky clean:)
     echo -en "\n"
