@@ -80,7 +80,7 @@ reggpg () {
 killgpg
 
 ## Lets utilize the gpg-agent plugin to check for and start a running agent
-source $ZSH_PLUGINS/gpg-agent/gpg-agent.plugin.zsh && echo -en "\n\nNew agent: $GPG_AGENT_INFO\nCreating symlink..\n" && ln -sf $GPG_AGENT_INFO "$GPG_AGENT_INFO_ROOT"
+source $ZSH_PLUGINS/induction/gpg-agent.plugin.zsh && echo -en "\n\nNew agent: $GPG_AGENT_INFO\nCreating symlink..\n" && ln -sf $GPG_AGENT_INFO "$GPG_AGENT_INFO_ROOT"
 if [ $? -eq 0 ]; then
     echo -en "Symlink created: $(ls -l $GPG_AGENT_INFO_ROOT)\n\nStarting key loading process..."
 else
